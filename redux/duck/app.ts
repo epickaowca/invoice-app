@@ -13,17 +13,17 @@ const reducer = (state = initialState, action:ActionTypes)=>{
         case DARK_MODE:
             return{
                 ...state,
-                darkMode: action.payload
+                darkMode: !state.darkMode
             }
         default: return state
     }
 }
 
-export type DarkModeType = {type: typeof DARK_MODE, payload: boolean}
+export type DarkModeType = {type: typeof DARK_MODE}
 
 
 
-export const setDarkMode = (payload:boolean):ActionTypes=>({type:DARK_MODE, payload})
+export const setDarkMode = ():ActionTypes=>({type:DARK_MODE})
 
 
 
