@@ -4,7 +4,7 @@ import PlusIco from '../public/assets/icon-plus.svg'
 
 type StyledBtnType = { content: string, case2: boolean}
 
-export interface StyledVariables extends CSSProperties {
+interface StyledVariables extends CSSProperties {
     '--color': string;
 }
 
@@ -57,6 +57,7 @@ const StyledBtn = styled.button<StyledBtnType>(({theme:{media:{tablet},colors:{b
         ${!content && `
             padding: 15px;
             & > div{
+                margin-right: 25px;
                 width: 40px;
                 height: 40px;
                 & > svg{

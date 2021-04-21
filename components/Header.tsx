@@ -19,6 +19,9 @@ const StyledHeader = styled.header`
         max-height: 100vh;
         width: 100px;
         border-top-right-radius: 20px;
+        position: absolute;
+        left: 0px;
+        top: 0px;
     }
 `
 
