@@ -25,8 +25,8 @@ const StyledHeader = styled.header`
     }
 `
 
-const ImageDiv = styled.div`
-    background: ${p=>p.theme.colors.blue};
+const ImageDiv = styled.div(({theme:{media: {tablet}, colors:{blue, medium_blue}}})=>`
+    background: ${blue};
     position: relative;
     width: 70px;
     height: 70px;
@@ -47,9 +47,9 @@ const ImageDiv = styled.div`
         content: '';
         display: none;
         display: block;
-        background: ${p=>p.theme.colors.medium_blue};
+        background: ${medium_blue};
     }
-    ${p=>p.theme.media.tablet}{
+    ${tablet}{
         width: 100px;
         height: 100px;
         &:before{
@@ -60,9 +60,9 @@ const ImageDiv = styled.div`
             transform: scale(1.5);
         }
     }
-`
+`)
 
-const RigthBar = styled.div`
+const RigthBar = styled.div(({theme:{media:{tablet, desktop}}})=>`
     display: flex;
     align-items: center;
     & > svg{
@@ -89,7 +89,7 @@ const RigthBar = styled.div`
             }
         }
     }
-    ${p=>p.theme.media.tablet}{
+    ${tablet}{
         & > svg{
             padding: 15px;
             width: 50px;
@@ -108,7 +108,7 @@ const RigthBar = styled.div`
             }
         }
     }
-    ${p=>p.theme.media.desktop}{
+    ${desktop}{
         height: 250px;
         flex-direction: column;
         justify-content: flex-end;
@@ -130,7 +130,7 @@ const RigthBar = styled.div`
             padding-top: 25px;
         }
     }
-`
+`)
 
 const Header = () => {
     const dispatch = useDispatch()

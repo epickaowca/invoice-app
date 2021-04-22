@@ -4,6 +4,7 @@ import ArrowIco from '../../public/assets/icon-arrow-down.svg'
 
 interface WrapperVariables extends CSSProperties{
     '--filter--visible': string
+    '--bg-color': string
 }
 
 const Wrapper = styled.div`
@@ -46,7 +47,7 @@ const FiltersWrapper = styled.div`
     width: 120px;
     border-radius: 15px;
     box-shadow: 0px 0px 15px rgba(0,0,0,.2);
-    background: white;
+    background: var(--bg-color);
     flex-direction: column;
     position: absolute;
     top: 40px;
@@ -67,10 +68,14 @@ const FiltersWrapper = styled.div`
     }
 `
 
+interface FilterInterface {
+    darkMode: boolean
+}
 
-const Filter:React.FC = () => {
+const Filter:React.FC<FilterInterface> = ({darkMode}) => {
     const [filterVisible, setFilterVisible] = useState(false)
     const filterStyle = filterVisible ? 'flex' : 'none'
+    const bgColorStyle = darkMode ? '#1E2139' : 'white'
 
     return (
         <Wrapper>
@@ -81,7 +86,7 @@ const Filter:React.FC = () => {
                 </span>
                 <ArrowIco />
             </div>
-            <FiltersWrapper style={{'--filter--visible': filterStyle} as WrapperVariables}>
+            <FiltersWrapper style={{'--filter--visible': filterStyle, '--bg-color': bgColorStyle} as WrapperVariables}>
                 <label>
                     <input type='checkbox' />
                     Draft

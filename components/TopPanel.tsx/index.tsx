@@ -1,9 +1,17 @@
+import { CSSProperties } from 'react'
+import { AppState } from '../../redux/duck'
 import styled from 'styled-components'
 import Filter from './Filter'
 import Article from './Article'
 import PrimaryButton from '../../elements/PrimaryButton' 
+import { useSelector } from 'react-redux'
+
+interface StyledInterface extends CSSProperties{
+    '--color-dark-mode': string
+}
 
 const Wrapper = styled.section`
+    color: var(--color-dark-mode);
     max-width: 1100px;
     padding: 25px 15px;
     display: flex;
@@ -28,11 +36,13 @@ const Wrapper = styled.section`
 `
 
 const TopPanel:React.FC = () => {
+    const darkMode = useSelector((state: AppState)=>state.app.darkMode)
+    const colorStyle = darkMode ? 'white' : 'black';
     return (
-        <Wrapper>
+        <Wrapper style={{'--color-dark-mode': colorStyle} as StyledInterface}>
             <Article />
             <div>
-                <Filter />
+                <Filter darkMode={darkMode} />
                 <PrimaryButton />
             </div>
         </Wrapper>
