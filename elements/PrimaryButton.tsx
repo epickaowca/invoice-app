@@ -1,11 +1,15 @@
 import { CSSProperties } from 'react'
 import styled from 'styled-components'
 import PlusIco from '../public/assets/icon-plus.svg'
+import { useSelector } from 'react-redux'
+import { AppState } from '../redux/duck'
 
 type StyledBtnType = { content: string, case2: boolean}
 
 interface StyledVariables extends CSSProperties {
     '--color': string;
+    '--case2-color': string
+    '--case2-bg-color': string
 }
 
 const StyledBtn = styled.button<StyledBtnType>(({theme:{media:{tablet},colors:{blue, cornflower_blue, white_lavender}}, case2, content }) =>`
@@ -17,7 +21,7 @@ const StyledBtn = styled.button<StyledBtnType>(({theme:{media:{tablet},colors:{b
     background: var(--color, ${blue});
     padding: 10px;
     white-space: nowrap;
-    color: ${case2 ?  cornflower_blue : 'white'};
+    color: ${case2 ?  'var(--case2-color)' : 'white'};
     overflow: hidden;
     border-radius: 40px;
     ${content && `
@@ -26,7 +30,7 @@ const StyledBtn = styled.button<StyledBtnType>(({theme:{media:{tablet},colors:{b
     `}
     ${case2 && `
         justify-content: center;
-        background: ${white_lavender};
+        background: var(--case2-bg-color);
         width: 100%;
     `};
     &:hover{
@@ -86,8 +90,11 @@ interface BtnInterface {
 }
 
 const PrimaryButton:React.FC<BtnInterface> = ({ content, clickHandler, color, case2 }) => {
+    const darkMode = useSelector((state:AppState)=>state.app.darkMode)
+    const case2Color = darkMode ? '#DFE3FA' : '#7E88C3'
+    const case2BgColor = darkMode ? '#252945' : '#F9FAFE'
     return (
-        <StyledBtn style={ {'--color': color} as StyledVariables } onClick={clickHandler} content={content} case2={case2}>
+        <StyledBtn style={ {'--color': color, '--case2-color': case2Color, '--case2-bg-color': case2BgColor} as StyledVariables } onClick={clickHandler} content={content} case2={case2}>
             {content ? content:
             <>
                 <div><PlusIco /></div>

@@ -5,6 +5,7 @@ import TopPanel from '../components/TopPanel.tsx'
 import Invoices from '../components/Invoices'
 import { useSelector } from 'react-redux'
 import { AppState } from '../redux/duck/index'
+import InvoiceForm from '../elements/InvoiceForm'
 
 interface CssVariables extends CSSProperties{
   '--bg-color': string
@@ -24,6 +25,7 @@ const Home:React.FC = ()=> {
       <Header />
       <TopPanel />
       <Invoices />
+      <InvoiceForm />
     </Wrapper>
   )
 }

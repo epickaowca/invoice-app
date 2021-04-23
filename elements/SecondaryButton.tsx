@@ -14,7 +14,7 @@ const StyledButton = styled.button<StyledBtnType>((
     font-size: 1.1rem;
     cursor: pointer;
     border-radius: 25px;
-    padding: 10px 15px;
+    padding: 20px 25px;
     background: ${case2 ? '#373B53' : darkMode ? dark_slate_blue : white_lavender};
     color: ${darkMode ? lavender : case2 ? light_steel_blue : cornflower_blue};
     &:hover{

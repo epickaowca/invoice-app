@@ -7,6 +7,8 @@ import { setDarkMode } from '../redux/duck/app'
 import styled from 'styled-components'
 
 const StyledHeader = styled.header`
+    position: relative;
+    z-index: 5;
     background-color: #373B53;
     display: flex;
     justify-content: space-between;
