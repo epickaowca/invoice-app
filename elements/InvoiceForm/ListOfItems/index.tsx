@@ -1,8 +1,10 @@
 import styled from 'styled-components'
 import PrimaryButton from '../../PrimaryButton'
 import Item from './Item'
+import { useState, useEffect, useCallback } from 'react'
 
 const StyledItemList = styled.div`
+    position: relative;    
     & > h1{
         color: #777F98;
         margin-bottom: 20px;
@@ -44,8 +46,44 @@ const StyledItemList = styled.div`
     }
 `
 
+const IdGenerator = ()=>Math.random().toString(36).substr(2, 9)
 
-const ItemList = () => {
+interface RFInterface {
+    updateFormState: (name: any, value: any, container?: any) => void
+} 
+
+
+const ItemList:React.FC<RFInterface> = ({updateFormState}) => {
+    const [item_list_state, change_item_list_state] = useState([{ name: "", quantity: 1, price: 0, total: "0.00", id: 'xdwafe'}])
+    const addItem = useCallback(()=>{
+        change_item_list_state(prev=>[...prev, { name: "", quantity: 1, price: 0, total: "0.00", id:IdGenerator()}])
+    },[])
+
+    useEffect(() => {
+        updateFormState('items', item_list_state)
+    }, [item_list_state])
+    
+    const updateItem = useCallback((id, e)=>{
+        change_item_list_state(prev=>prev.map(elem=>{
+            if(elem.id === id){
+                    const { name, value } = e.target
+                    const newVal = {...elem}
+                    newVal[name] = value
+                    if(name === 'quantity' || name === 'price'){
+                        newVal.total = (newVal.quantity*newVal.price).toFixed(2)
+                    }
+                    return newVal
+            }else{
+                return elem
+            }
+        }))
+    },[])
+
+    const deleteHandler1 = useCallback((id)=>{
+        change_item_list_state(prev=>prev.filter(elem=>elem.id !== id))
+    },[])
+
+
     return (
         <StyledItemList>
             <h1>Item List</h1>
@@ -58,10 +96,9 @@ const ItemList = () => {
                 </div>
             </div>
             <section>
-                <Item />
-                <Item />
+                {item_list_state.map((item) => <Item key={item.id} itemProps={item} deleteHandler={deleteHandler1} setProps={updateItem} />)}
             </section>
-            <PrimaryButton case2 content='+ Add New Item' />
+            <PrimaryButton clickHandler={addItem} case2 content='+ Add New Item' />
         </StyledItemList>
     )
 }

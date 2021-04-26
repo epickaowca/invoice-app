@@ -2,8 +2,6 @@ import Image from 'next/image'
 import Moon from '../public/assets/icon-moon.svg'
 import { useDispatch } from 'react-redux'
 import { setDarkMode } from '../redux/duck/app'
-
-
 import styled from 'styled-components'
 
 const StyledHeader = styled.header`

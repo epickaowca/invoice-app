@@ -84,7 +84,7 @@ const StyledBtn = styled.button<StyledBtnType>(({theme:{media:{tablet},colors:{b
 
 interface BtnInterface {
     content?: string
-    clickHandler?: ()=>{}
+    clickHandler?: any
     color?: string
     case2?: boolean
 }

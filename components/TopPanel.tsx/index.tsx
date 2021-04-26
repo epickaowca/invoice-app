@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import Filter from './Filter'
 import Article from './Article'
 import PrimaryButton from '../../elements/PrimaryButton' 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setInvoiceFormVisible } from '../../redux/duck/app'
 
 interface StyledInterface extends CSSProperties{
     '--color-dark-mode': string
@@ -36,6 +37,7 @@ const Wrapper = styled.section`
 `
 
 const TopPanel:React.FC = () => {
+    const dispatch = useDispatch()
     const darkMode = useSelector((state: AppState)=>state.app.darkMode)
     const colorStyle = darkMode ? 'white' : 'black';
     return (
@@ -43,7 +45,7 @@ const TopPanel:React.FC = () => {
             <Article />
             <div>
                 <Filter darkMode={darkMode} />
-                <PrimaryButton />
+                <PrimaryButton clickHandler={()=>dispatch(setInvoiceFormVisible(true))} />
             </div>
         </Wrapper>
     )

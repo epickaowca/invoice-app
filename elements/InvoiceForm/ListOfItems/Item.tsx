@@ -1,11 +1,19 @@
 import styled from 'styled-components'
 import RemoveIco from '../../../public/assets/icon-delete.svg'
+import React, { Dispatch, SetStateAction, ChangeEvent, useState, useEffect } from 'react'
 
 const StyledItem = styled.div`
     margin: 45px 0px;
     & > div{
         display: flex;
         & > label{
+        
+            & > input{
+                &::-moz-appearance: textfield;
+                &::-webkit-outer-spin-button,&::-webkit-inner-spin-button {
+                    -webkit-appearance: none;
+                }
+            }
             &:nth-child(1){
                 flex: 1;
             }
@@ -51,27 +59,36 @@ const StyledItem = styled.div`
     }
 `
 
-const Item = () => {
+interface ItemInteface {
+    itemProps: any
+    setProps: any
+    deleteHandler: any
+}
+
+const Item:React.FC<ItemInteface> = ({setProps, itemProps, deleteHandler}) => {
+    const stateHandler = (e:ChangeEvent<HTMLInputElement>)=>{
+        setProps(itemProps.id, e)
+    }
     return (
         <StyledItem>
             <label>
                 <p>Item Name</p>
-                <input type='text' />
+                <input name='name' type='text' onChange={stateHandler} value={itemProps.name} />
             </label>
             <div>
                 <label>
                     <p>Qty.</p>
-                    <input type='text' />
+                    <input name='quantity' type='number' onChange={stateHandler} value={itemProps.quantity} />
                 </label>
                 <label>
                     <p>Price</p>
-                    <input type='text' />
+                    <input name='price' type='number' onChange={stateHandler} value={itemProps.price} />
                 </label>
                 <label>
                     <p>Total</p>
                     <div>
-                        <span>156.00</span>
-                        <RemoveIco />
+                        <span>{itemProps.total}</span>
+                        <RemoveIco onClick={()=>deleteHandler(itemProps.id)} />
                     </div>
                 </label>
             </div>
@@ -79,4 +96,4 @@ const Item = () => {
     )
 }
 
-export default Item
+export default React.memo(Item)

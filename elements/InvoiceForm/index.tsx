@@ -1,14 +1,20 @@
-import { CSSProperties } from 'react'
+import { CSSProperties, useState } from 'react'
 import styled from 'styled-components'
 import ArrowLeft from '../../public/assets/icon-arrow-left.svg'
 import ItemList from './ListOfItems'
 import PrimaryButton from '../PrimaryButton'
 import SecondaryButton from '../SecondaryButton'
-import { formCss } from './stylesUtility'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setInvoiceFormVisible } from '../../redux/duck/app'
 import { AppState } from '../../redux/duck'
+import BillFrom from './BillFrom'
+import BillTo from './BillTo'
+import { useEffect } from 'react'
+import { defaultFormState } from './utility'
 
-const Wrapper = styled.section`
+
+const Wrapper = styled.section(({theme:{media:{ tablet, desktop },colors:{ cornflower_blue, lavender }}})=>`
+    display: var(--display-case);
     left: 0px;    
     position: absolute;
     background: var(--bg-color);
@@ -17,7 +23,8 @@ const Wrapper = styled.section`
     width: 100%;
     padding: 25px;
     padding-top: 40px;
-    padding-bottom: 270px;
+    padding-bottom: 270px; 
+    
     & input, & select{
         color: var(--h1-color);
         background: var(--input-color);
@@ -32,12 +39,15 @@ const Wrapper = styled.section`
         margin: 15px 0px;
         display: block;
         & p{
-            color: ${p=>p.theme.colors.cornflower_blue};
+            color: ${cornflower_blue};
             font-size: .9rem;
         }
     }
     & > div{
         &:nth-child(1){
+            color: var(--h1-color);
+            position: relative;
+            z-index: 3;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -49,10 +59,23 @@ const Wrapper = styled.section`
     & > h1{
         color: var(--h1-color);
         margin-top: 25px;
+        position: relative;
+        z-index: 3;
     }
-    ${p=>p.theme.media.tablet}{
+    & > section{
+        &:nth-child(3){
+            &::-webkit-scrollbar{
+                width: 12px;
+            }
+            &::-webkit-scrollbar-thumb{
+                background: ${lavender};
+                border-radius: 6px;
+            }
+        }
+    }
+    ${tablet}{
         height: 100vh; 
-        max-height: 1400px; 
+        max-height: 1500px; 
         max-width: 700px;
         top: 0px;
         border-top-right-radius: 30px;
@@ -69,50 +92,28 @@ const Wrapper = styled.section`
                 display: none;
             }
         }
-        & > form{
-            padding: 0px 20px;
-            padding-bottom: 40px;
-            max-height: 100%;
-            overflow-y: auto;
+        & > section{
+            position: relative;
+            z-index: 3;
+            &:nth-child(3){
+                padding: 0px 20px;
+                padding-bottom: 40px;
+                max-height: 100%;
+                overflow-y: auto;
+            }
         }
     }
-    ${p=>p.theme.media.desktop}{
+    ${desktop}{
         padding-top: 35px;
         top: 0px;
         padding-left: 120px;
         max-width: 900px;
     }
-`
+`)
 
-const BillFrom = styled.div`
-    ${formCss}
-    ${p=>p.theme.media.tablet}{
-        margin-top: 20px;
-    }
-`
-
-const BillTo = styled.div`
-    ${formCss}
-    ${p=>p.theme.media.tablet}{
-        & > div{
-            &:nth-child(6){
-                & > label{
-                    margin: 0px;
-                    &:nth-child(1){
-                        margin-right: 25px;
-                    }
-                    & > select, & > input{
-                        height: 55px;
-                    }
-                }
-            }
-        }
-    }
-`
-
-const ActionSection = styled.section`
+const ActionSection = styled.section(({theme:{media:{ tablet, desktop }}})=>`
     background: var(--bg-color);
-    position: absolute;
+    position: absolute !important;
     bottom: 0px;
     left: 0px;
     max-width: 100%;
@@ -123,13 +124,13 @@ const ActionSection = styled.section`
     box-shadow: 0px -20px 25px rgba(0,0,0,.08);
     & button{
         margin: 15px auto;
+        
     }
     & > div{
         display: flex;
     }
-    ${p=>p.theme.media.tablet}{
+    ${tablet}{
         padding: 30px;
-        position: absolute;
         max-width: 700px;
         bottom: 0px;
         flex-direction: row;
@@ -144,119 +145,109 @@ const ActionSection = styled.section`
             }
         }
     }
-    ${p=>p.theme.media.desktop}{
+    ${desktop}{
         padding-left: 155px;
         max-width: 900px;
     }
+`)
+
+
+const MaskDiv = styled.div`
+    cursor: pointer;
+    display: var(--display-case);
+    z-index: 2;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background: rgba(0,0,0,.6);
 `
+
 
 interface WrapperInterface extends CSSProperties {
     '--bg-color': string
     '--h1-color': string
     '--input-color': string
     '--input--border-color': string
+    '--display-case': string
 }
 
+
+
+function addDays(date, days) {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    const resultInFormat = result.toISOString().slice(0, 10)
+    return resultInFormat;
+}
+
+
+
 const InvoiceForm:React.FC = () => {
+    const dispatch = useDispatch()
+    const [formState, setFormState] = useState(defaultFormState)
+    const showInvoiceForm = useSelector((state:AppState)=>state.app.showInvoiceForm)
     const darkMode = useSelector((state:AppState)=>state.app.darkMode)
-    const bgColor = darkMode ? '#141625' : 'white'
-    const h1Color = darkMode ? 'white' : 'black'
-    const inputColor = darkMode ? '#1E2139' : 'white'
-    const inputBorderColor = darkMode ? '#252945' : '#DFE3FA'
-    const wrapperStyles = {'--bg-color': bgColor, '--h1-color': h1Color, '--input-color': inputColor, '--input--border-color': inputBorderColor}
+    const stylesForWrapper = WrapperStylesFunction(darkMode, showInvoiceForm)
+    const { displayStyle, bgColor, h1Color, inputColor, inputBorderColor} = stylesForWrapper
+    const wrapperStyles = {'--display-case': displayStyle,'--bg-color': bgColor, '--h1-color': h1Color, '--input-color': inputColor, '--input--border-color': inputBorderColor}
+    useEffect(() => {
+        if(formState.createdAt && formState.paymentTerms){
+            const endOfTerms = addDays(formState.createdAt, +formState.paymentTerms)
+            setFormState(prev=>({...prev, paymentDue: endOfTerms}))
+        }
+    }, [formState.createdAt, formState.paymentTerms])
+
+    const updateFormState = (name:any, value:any, container?:any)=>{
+        if(container){
+            setFormState(prev=>({...prev, [container]:{...prev[container], [name]: value}}))
+        }else{
+            setFormState(prev=>({...prev, [name]: value}))
+        }
+    }
     return (
-        <Wrapper style={wrapperStyles as WrapperInterface}>
-            <div>
-                <ArrowLeft />
-                <p>Go back</p>
-            </div>
-            <h1>New Invoice</h1>
-            <form>
-                <BillFrom>
-                    <span>Bill From</span>
-                    <label>
-                        <p>Street Address</p>
-                        <input type='text' />
-                    </label>
-                    <div>
-                        <div>
-                            <label>
-                                <p>City</p>
-                                <input type='text' />
-                            </label>
-                            <label>
-                                <p>Post Code</p>
-                                <input type='text' />
-                            </label>
-                        </div>
-                        <label>
-                            <p>Country</p>
-                            <input type="text" />
-                        </label>
-                    </div>
-                </BillFrom>
-                <BillTo>
-                    <span>Bill To</span>
-                    <label>
-                        <p>Client'name</p>
-                        <input type='text' />
-                    </label>
-                    <label>
-                        <p>Client'Email</p>
-                        <input type='email' />
-                    </label>
-                    <label>
-                        <p>Street Address</p>
-                        <input type='text' />
-                    </label>
-                    <div>
-                        <div>
-                            <label>
-                                <p>City</p>
-                                <input type='text' />
-                            </label>
-                            <label>
-                                <p>Post Code</p>
-                                <input type='text' />
-                            </label>
-                        </div>
-                        <label>
-                            <p>Country</p>
-                            <input type="text" />
-                        </label>
-                    </div>
-                    <div>
-                        <label>
-                            <p>Invoice Date</p>
-                            <input type='date' />
-                        </label>
-                        <label>
-                            <p>Payment Terms</p>
-                            <select>
-                                <option>Now</option>
-                                <option>Next 3 Days</option>
-                                <option>Next 7 Days</option>
-                                <option>Next 14 Days</option>
-                                <option>Next 30 Days</option>
-                            </select>
-                        </label>
-                    </div>
-                    <label>
-                        <p>Project Description</p>
-                        <input type='text' />
-                    </label>
-                </BillTo>
-                <ItemList />
-            </form>
-            <ActionSection>
-                <SecondaryButton>Discard</SecondaryButton>
-                <div>
-                    <SecondaryButton case2>Save as Draft</SecondaryButton>
-                    <PrimaryButton content='Save & Send' />
+        <>
+            <Wrapper style={wrapperStyles as WrapperInterface}>
+                <div onClick={()=>dispatch(setInvoiceFormVisible(false))}>
+                    <ArrowLeft />
+                    <p>Go back</p>
                 </div>
-            </ActionSection>
-        </Wrapper>
+                <h1>New Invoice</h1>
+                <section>
+                    <BillFrom props={formState} updateFormState={updateFormState} />
+                    <BillTo props={formState} updateFormState={updateFormState} />
+                    <ItemList updateFormState={updateFormState} />
+                </section>
+                <ActionSection>
+                    <SecondaryButton clickHandler={()=>dispatch(setInvoiceFormVisible(false))}>Discard</SecondaryButton>
+                    <div>
+                        <SecondaryButton case2>Save as Draft</SecondaryButton>
+                        <PrimaryButton content='Save & Send' />
+                    </div>
+                </ActionSection>
+            </Wrapper>
+            <MaskDiv style={{'--display-case': displayStyle} as WrapperInterface} onClick={()=>dispatch(setInvoiceFormVisible(false))} />
+        </>
     )
 }
+
+
+
+const WrapperStylesFunction = (darkMode, showInvoiceForm)=>{
+    const res = {
+        bgColor: darkMode ? '#141625' : 'white',
+        h1Color: darkMode ? 'white' : 'black',
+        inputColor: darkMode ? '#1E2139' : 'white',
+        inputBorderColor: darkMode ? '#252945' : '#DFE3FA',
+        displayStyle: showInvoiceForm ? 'block' : 'none',
+    }
+    return res
+}
+
+
+
 
 export default InvoiceForm

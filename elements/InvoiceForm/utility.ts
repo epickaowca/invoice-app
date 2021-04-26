@@ -1,6 +1,7 @@
 import {css} from 'styled-components'
 
 export const formCss = css`
+    position: relative;
     margin: 45px 0px;
     & > span{
         color: ${p=>p.theme.colors.blue};
@@ -38,3 +39,32 @@ export const formCss = css`
         }
     }
 `
+
+export const defaultFormState = {
+    id: "",
+    createdAt: "",
+    paymentDue: "",
+    description: "",
+    paymentTerms: 3,
+    clientName: "",
+    clientEmail: "",
+    status: "",
+    senderAddress: {
+        street: "",
+        city: "",
+        postCode: "",
+        country: ""
+    },
+    clientAddress: {
+        street: "",
+        city: "",
+        postCode: "",
+        country: ""
+    },
+    items: [
+        {
+            name: "", quantity: 1, price: 0, total: "0.00", id: 'xdwafe'
+        },
+    ],
+    "total": 556.00
+}
