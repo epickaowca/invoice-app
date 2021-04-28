@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { AppState } from '../../redux/duck'
 import PrimaryButton from '../PrimaryButton'
 import SecondaryButton from '../SecondaryButton'
-import { addInvoice, setInvoiceFormVisible } from '../../redux/duck/app'
+import { addInvoice, setInvoiceFormVisible, updateInvoice } from '../../redux/duck/app'
 import { IdGenerator } from './utility'
 
 const StyledSection= styled.section(({theme:{media:{ tablet, desktop }}})=>`
@@ -56,19 +56,35 @@ const ActionSection:React.FC = () => {
         dispatch(setInvoiceFormVisible({visibleBoolean: false}))
         return null
     }
-    const addInvoiceToRedux = ()=>{
+    const addInvoiceToRedux = (status)=>{
         let invoiceHelper = {...invoiceForm}
+        let total = 0
+        invoiceHelper.items.forEach(elem=>{
+            total += +elem.total
+        })
         invoiceHelper.id = IdGenerator()
-        invoiceHelper.status = 'paid'
+        invoiceHelper.status = status
+        invoiceHelper.total = total
         dispatch(addInvoice(invoiceHelper))
+    }
+
+    const updateInvoiceToRedux = ()=>{
+        const invoiceHelper = {...invoiceForm}
+        let total = 0
+        invoiceHelper.items.forEach(elem=>{
+            total += +elem.total
+        })
+        console.log(total)
+        invoiceHelper.total = total 
+        dispatch(updateInvoice({id: invoiceHelper.id, value: invoiceHelper}))
     }
 
     return (
     <StyledSection>
         {!editCase && <SecondaryButton clickHandler={closeForm}>Discard</SecondaryButton>}
         <div>
-            <SecondaryButton clickHandler={editCase ? closeForm : addInvoiceToRedux} case2={!editCase}>{editCase ? 'Cancel' : 'Save as Draft'}</SecondaryButton>
-            <PrimaryButton clickHandler={addInvoiceToRedux} content='Save & Send' />
+            <SecondaryButton clickHandler={editCase ? closeForm : ()=>addInvoiceToRedux('draft')} case2={!editCase}>{editCase ? 'Cancel' : 'Save as Draft'}</SecondaryButton>
+            <PrimaryButton clickHandler={editCase ? updateInvoiceToRedux : ()=>addInvoiceToRedux('pending')} content='Save & Send' />
         </div>
     </StyledSection>
     )
