@@ -59,7 +59,7 @@ const BillTo:React.FC = () => {
             <div>
                 <label>
                     <p>Invoice Date</p>
-                    <InputFC name='createdAt' />
+                    <InputFC type="date" name='createdAt' />
                 </label>
                 <label>
                     <p>Payment Terms</p>

@@ -68,3 +68,5 @@ export const defaultFormState = {
     ],
     total: 0
 }
+
+export const IdGenerator = ()=>Math.random().toString(36).substr(2, 9)

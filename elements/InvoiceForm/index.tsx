@@ -2,8 +2,6 @@ import { CSSProperties, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import ArrowLeft from '../../public/assets/icon-arrow-left.svg'
 import ItemList from './ListOfItems'
-import PrimaryButton from '../PrimaryButton'
-import SecondaryButton from '../SecondaryButton'
 import { useSelector, useDispatch } from 'react-redux'
 import { setInvoiceFormVisible } from '../../redux/duck/app'
 import { AppState } from '../../redux/duck'
@@ -12,7 +10,7 @@ import BillTo from './BillTo'
 import { useEffect } from 'react'
 import { defaultFormState } from './utility'
 import { changeState } from '../../redux/duck/invoiceForm'
-
+import ActionSection from './ActionSection'
 
 const Wrapper = styled.section(({theme:{media:{ tablet, desktop },colors:{ cornflower_blue, lavender }}})=>`
     display: var(--display-case);
@@ -112,45 +110,7 @@ const Wrapper = styled.section(({theme:{media:{ tablet, desktop },colors:{ cornf
     }
 `)
 
-const ActionSection = styled.section(({theme:{media:{ tablet, desktop }}})=>`
-    background: var(--bg-color);
-    position: absolute !important;
-    bottom: 0px;
-    left: 0px;
-    max-width: 100%;
-    display: flex;
-    flex-direction: column-reverse;
-    width: 100%;
-    padding: 20px 0px;
-    box-shadow: 0px -20px 25px rgba(0,0,0,.08);
-    & button{
-        margin: 15px auto;
-        
-    }
-    & > div{
-        display: flex;
-    }
-    ${tablet}{
-        padding: 30px;
-        max-width: 700px;
-        bottom: 0px;
-        flex-direction: row;
-        justify-content: space-between;
-        border-bottom-right-radius: 15px;
-        & > button{
-            margin: 0px;
-        }
-        & > div{
-            & > button{
-                margin: 0px 25px;
-            }
-        }
-    }
-    ${desktop}{
-        padding-left: 155px;
-        max-width: 900px;
-    }
-`)
+
 
 
 const MaskDiv = styled.div`
@@ -221,13 +181,7 @@ const InvoiceForm:React.FC = () => {
                     <BillTo />
                     <ItemList />
                 </section>
-                <ActionSection>
-                    {!editCase && <SecondaryButton clickHandler={closeForm}>Discard</SecondaryButton>}
-                    <div>
-                        <SecondaryButton clickHandler={editCase ? closeForm : ()=>null} case2={!editCase}>{editCase ? 'Cancel' : 'Save as Draft'}</SecondaryButton>
-                        <PrimaryButton content='Save & Send' />
-                    </div>
-                </ActionSection>
+                <ActionSection />
             </Wrapper>
             <MaskDiv style={{'--display-case': displayStyle} as WrapperInterface} onClick={closeForm} />
         </>

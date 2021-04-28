@@ -1,6 +1,7 @@
 export const DARK_MODE = 'app/dark_mode'
 export const SHOW_INVOICE_FORM = 'app/show_invoice_form'
 export const LOAD_DATA = 'app/load_data'
+export const ADD_INVOICE = 'app/add_item'
 
 import { defaultFormState } from '../../elements/InvoiceForm/utility'
 
@@ -27,6 +28,13 @@ const reducer = (state = initialState, action:ActionTypes)=>{
                 ...state,
                 darkMode: !state.darkMode
             }
+        case ADD_INVOICE:{
+            console.log(action.payload)
+            return{
+                ...state,
+                invoiceList: [...state.invoiceList, action.payload]
+            }
+        }
         case SHOW_INVOICE_FORM:{
             const { editCase, visibleBoolean, editId } = action.payload
             return{
@@ -50,6 +58,7 @@ type InvoiceFormTypeHelper = {visibleBoolean: boolean, editCase?: boolean, editI
 export type DarkModeType = {type: typeof DARK_MODE}
 export type ShowInvoiceFormType = {type: typeof SHOW_INVOICE_FORM, payload: InvoiceFormTypeHelper}
 export type LoadDataType = {type: typeof LOAD_DATA, payload: typeof defaultFormState[][]}
+export type AddInvoiceType = {type: typeof ADD_INVOICE, payload: typeof defaultFormState}
 
 
 export const setDarkMode = ():ActionTypes=>({type:DARK_MODE})
@@ -58,8 +67,9 @@ export const setInvoiceFormVisible = (payload:InvoiceFormTypeHelper):ActionTypes
 
 export const loadData = (payload:typeof defaultFormState[][]):ActionTypes=>({type:LOAD_DATA, payload})
 
+export const addInvoice = (payload:typeof defaultFormState):ActionTypes=>({type:ADD_INVOICE, payload})
 
 
-export type ActionTypes = DarkModeType | ShowInvoiceFormType | LoadDataType
+export type ActionTypes = DarkModeType | ShowInvoiceFormType | LoadDataType | AddInvoiceType
 
 export default reducer

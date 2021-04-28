@@ -4,6 +4,7 @@ import Item from './Item'
 import { useSelector, useDispatch } from 'react-redux'
 import { AppState } from '../../../redux/duck'
 import { addItem as addItemToRedux } from '../../../redux/duck/invoiceForm'
+import { IdGenerator } from '../utility'
 
 const StyledItemList = styled.div`
     position: relative;    
@@ -48,7 +49,6 @@ const StyledItemList = styled.div`
     }
 `
 
-const IdGenerator = ()=>Math.random().toString(36).substr(2, 9)
 
 
 const ItemList:React.FC = () => {
