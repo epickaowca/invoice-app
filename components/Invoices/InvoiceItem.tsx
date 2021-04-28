@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import InvoiceStatus from '../../elements/InvoiceStatus'
 import Link from 'next/link'
 import IcoArrow from '../../public/assets/icon-arrow-right.svg'
+import { defaultFormState } from '../../elements/InvoiceForm/utility'
 
 interface StyledInterface extends CSSProperties {
     '--color-darkmode': string
@@ -131,7 +132,12 @@ const StyledDiv = styled.div(({theme: {media: {tablet, desktop}}})=>`
     }
 `)
 
-const InvoiceItem:React.FC = () => {
+
+interface FCInterface {
+    props: typeof defaultFormState
+}
+
+const InvoiceItem:React.FC<FCInterface> = ({props}) => {
     const darkMode = useSelector((state: AppState)=> state.app.darkMode)
     const colorStyle = darkMode ? 'white' : 'black'
     const bgColorStyle = darkMode ? '#1E2139' : 'white'
@@ -139,16 +145,16 @@ const InvoiceItem:React.FC = () => {
         <Link href="#">
             <Wrapper style={{ '--color-darkmode': colorStyle, '--bg-color-darkmode': bgColorStyle } as StyledInterface}>
                 <div>
-                    <p>#RT3080</p>
-                    <p>Jensen Huang</p>
+                    <p>#{props.id}</p>
+                    <p>{props.clientName}</p>
                 </div>
                 <StyledDiv>
                     <div>
-                        <p>Due 19 Aug 2021</p>
-                        <p>£ 1,800.90</p>
+                        <p>Due {props.paymentDue}</p>
+                        <p>£ {props.total}</p>
                     </div>
                     <div>
-                        <InvoiceStatus status='paid' />
+                        <InvoiceStatus status={props.status} />
                         <IcoArrow />
                     </div>
                 </StyledDiv>

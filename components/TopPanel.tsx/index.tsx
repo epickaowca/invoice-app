@@ -45,7 +45,7 @@ const TopPanel:React.FC = () => {
             <Article />
             <div>
                 <Filter darkMode={darkMode} />
-                <PrimaryButton clickHandler={()=>dispatch(setInvoiceFormVisible(true))} />
+                <PrimaryButton clickHandler={()=>dispatch(setInvoiceFormVisible({visibleBoolean: true, editCase: true, editId: 'FV2353'}))} />
             </div>
         </Wrapper>
     )

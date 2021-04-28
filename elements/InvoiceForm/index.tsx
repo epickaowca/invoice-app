@@ -1,4 +1,4 @@
-import { CSSProperties, useState } from 'react'
+import { CSSProperties, useState, useCallback } from 'react'
 import styled from 'styled-components'
 import ArrowLeft from '../../public/assets/icon-arrow-left.svg'
 import ItemList from './ListOfItems'
@@ -11,6 +11,7 @@ import BillFrom from './BillFrom'
 import BillTo from './BillTo'
 import { useEffect } from 'react'
 import { defaultFormState } from './utility'
+import { changeState } from '../../redux/duck/invoiceForm'
 
 
 const Wrapper = styled.section(({theme:{media:{ tablet, desktop },colors:{ cornflower_blue, lavender }}})=>`
@@ -157,8 +158,8 @@ const MaskDiv = styled.div`
     display: var(--display-case);
     z-index: 2;
     width: 100vw;
-    height: 100vh;
-    position: absolute;
+    height: 100%;
+    position: fixed;
     top: 0px;
     bottom: 0px;
     left: 0px;
@@ -176,60 +177,59 @@ interface WrapperInterface extends CSSProperties {
 }
 
 
-
-function addDays(date, days) {
-    const result = new Date(date);
-    result.setDate(result.getDate() + days);
-    const resultInFormat = result.toISOString().slice(0, 10)
-    return resultInFormat;
-}
-
-
-
-const InvoiceForm:React.FC = () => {
+const InvoiceForm:React.FC = () => {        
     const dispatch = useDispatch()
-    const [formState, setFormState] = useState(defaultFormState)
-    const showInvoiceForm = useSelector((state:AppState)=>state.app.showInvoiceForm)
-    const darkMode = useSelector((state:AppState)=>state.app.darkMode)
-    const stylesForWrapper = WrapperStylesFunction(darkMode, showInvoiceForm)
-    const { displayStyle, bgColor, h1Color, inputColor, inputBorderColor} = stylesForWrapper
-    const wrapperStyles = {'--display-case': displayStyle,'--bg-color': bgColor, '--h1-color': h1Color, '--input-color': inputColor, '--input--border-color': inputBorderColor}
-    useEffect(() => {
-        if(formState.createdAt && formState.paymentTerms){
-            const endOfTerms = addDays(formState.createdAt, +formState.paymentTerms)
-            setFormState(prev=>({...prev, paymentDue: endOfTerms}))
-        }
-    }, [formState.createdAt, formState.paymentTerms])
 
-    const updateFormState = (name:any, value:any, container?:any)=>{
-        if(container){
-            setFormState(prev=>({...prev, [container]:{...prev[container], [name]: value}}))
+    const allInvoices = useSelector((state:AppState)=>state.app.invoiceList)
+    const editing_invoice_ID = useSelector((state:AppState)=>state.app.editingInvoiceID) 
+    const editCase = useSelector((state:AppState)=>state.app.InvoiceFormEditCase)
+    const darkMode = useSelector((state:AppState)=>state.app.darkMode)
+    const showInvoiceForm = useSelector((state:AppState)=>state.app.showInvoiceForm)
+
+    const invoiceID = useSelector((state:AppState)=>state.invoiceForm.id)
+
+    const stylesForWrapper = WrapperStylesFunction(darkMode, showInvoiceForm)
+    
+    const { displayStyle, bgColor, h1Color, inputColor, inputBorderColor} = stylesForWrapper
+
+    const wrapperStyles = {'--display-case': displayStyle,'--bg-color': bgColor, '--h1-color': h1Color, '--input-color': inputColor, '--input--border-color': inputBorderColor}
+
+    useEffect(() => {
+        if(editCase){
+            const invoice = (allInvoices as any).find(elem=>elem.id === editing_invoice_ID)
+            dispatch(changeState({fullState: invoice}))
         }else{
-            setFormState(prev=>({...prev, [name]: value}))
+            dispatch(changeState({fullState: defaultFormState}))
         }
+    }, [editCase])
+
+    const closeForm = ()=>{
+        dispatch(setInvoiceFormVisible({visibleBoolean: false}))
+        return null
     }
+
     return (
         <>
             <Wrapper style={wrapperStyles as WrapperInterface}>
-                <div onClick={()=>dispatch(setInvoiceFormVisible(false))}>
+                <div onClick={()=>dispatch(setInvoiceFormVisible({visibleBoolean: false}))}>
                     <ArrowLeft />
                     <p>Go back</p>
                 </div>
-                <h1>New Invoice</h1>
+                <h1>{editCase ? `Edit #${invoiceID}`: 'New Invoice'}</h1>
                 <section>
-                    <BillFrom props={formState} updateFormState={updateFormState} />
-                    <BillTo props={formState} updateFormState={updateFormState} />
-                    <ItemList updateFormState={updateFormState} />
+                    <BillFrom />
+                    <BillTo />
+                    <ItemList />
                 </section>
                 <ActionSection>
-                    <SecondaryButton clickHandler={()=>dispatch(setInvoiceFormVisible(false))}>Discard</SecondaryButton>
+                    {!editCase && <SecondaryButton clickHandler={closeForm}>Discard</SecondaryButton>}
                     <div>
-                        <SecondaryButton case2>Save as Draft</SecondaryButton>
+                        <SecondaryButton clickHandler={editCase ? closeForm : ()=>null} case2={!editCase}>{editCase ? 'Cancel' : 'Save as Draft'}</SecondaryButton>
                         <PrimaryButton content='Save & Send' />
                     </div>
                 </ActionSection>
             </Wrapper>
-            <MaskDiv style={{'--display-case': displayStyle} as WrapperInterface} onClick={()=>dispatch(setInvoiceFormVisible(false))} />
+            <MaskDiv style={{'--display-case': displayStyle} as WrapperInterface} onClick={closeForm} />
         </>
     )
 }

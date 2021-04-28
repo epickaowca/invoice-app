@@ -1,7 +1,9 @@
 import styled from 'styled-components'
 import PrimaryButton from '../../PrimaryButton'
 import Item from './Item'
-import { useState, useEffect, useCallback } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { AppState } from '../../../redux/duck'
+import { addItem as addItemToRedux } from '../../../redux/duck/invoiceForm'
 
 const StyledItemList = styled.div`
     position: relative;    
@@ -48,40 +50,14 @@ const StyledItemList = styled.div`
 
 const IdGenerator = ()=>Math.random().toString(36).substr(2, 9)
 
-interface RFInterface {
-    updateFormState: (name: any, value: any, container?: any) => void
-} 
 
+const ItemList:React.FC = () => {
+    const reduxItems = useSelector((state:AppState)=>state.invoiceForm.items)
+    const dispatch = useDispatch()
 
-const ItemList:React.FC<RFInterface> = ({updateFormState}) => {
-    const [item_list_state, change_item_list_state] = useState([{ name: "", quantity: 1, price: 0, total: "0.00", id: 'xdwafe'}])
-    const addItem = useCallback(()=>{
-        change_item_list_state(prev=>[...prev, { name: "", quantity: 1, price: 0, total: "0.00", id:IdGenerator()}])
-    },[])
-
-    useEffect(() => {
-        updateFormState('items', item_list_state)
-    }, [item_list_state])
-    
-    const updateItem = useCallback((id, e)=>{
-        change_item_list_state(prev=>prev.map(elem=>{
-            if(elem.id === id){
-                    const { name, value } = e.target
-                    const newVal = {...elem}
-                    newVal[name] = value
-                    if(name === 'quantity' || name === 'price'){
-                        newVal.total = (newVal.quantity*newVal.price).toFixed(2)
-                    }
-                    return newVal
-            }else{
-                return elem
-            }
-        }))
-    },[])
-
-    const deleteHandler1 = useCallback((id)=>{
-        change_item_list_state(prev=>prev.filter(elem=>elem.id !== id))
-    },[])
+    const addItem = ()=>{
+        dispatch(addItemToRedux({ name: "", quantity: 1, price: 0, total: "0.00", id:IdGenerator()}))
+    }
 
 
     return (
@@ -96,7 +72,7 @@ const ItemList:React.FC<RFInterface> = ({updateFormState}) => {
                 </div>
             </div>
             <section>
-                {item_list_state.map((item) => <Item key={item.id} itemProps={item} deleteHandler={deleteHandler1} setProps={updateItem} />)}
+                {reduxItems.map((item) => <Item key={item.id} id={item.id}/>)}
             </section>
             <PrimaryButton clickHandler={addItem} case2 content='+ Add New Item' />
         </StyledItemList>

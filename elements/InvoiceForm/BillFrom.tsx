@@ -1,7 +1,7 @@
+import React from 'react'
 import styled from 'styled-components'
 import {formCss} from './utility'
-import { defaultFormState } from './utility'
-import {ChangeEvent} from 'react'
+import InputFC from './InputFC'
 
 const Wrapper = styled.div`
     ${formCss}
@@ -10,37 +10,29 @@ const Wrapper = styled.div`
     }
 `
 
-export interface FCInterface {
-    props: typeof defaultFormState
-    updateFormState: (name: any, value: any, container?: any) => void
-}
 
-const BillFrom:React.FC<FCInterface> = ({props, updateFormState}) => {
-    const inputHandler = (e:ChangeEvent<HTMLInputElement>)=>{
-        updateFormState(e.target.name, e.target.value, 'senderAddress')
-    }
-    const { street, city, postCode, country } = props.senderAddress
+const BillFrom:React.FC = () => {
     return (
         <Wrapper>
         <span>Bill From</span>
         <label>
             <p>Street Address</p>
-            <input onChange={inputHandler} name="street" value={street} type='text' />
+            <InputFC name='street' nestName='senderAddress' />
         </label>
         <div>
             <div>
                 <label>
                     <p>City</p>
-                    <input onChange={inputHandler} name="city" value={city} type='text' />
+                    <InputFC name='city' nestName='senderAddress' />
                 </label>
                 <label>
                     <p>Post Code</p>
-                    <input onChange={inputHandler} name="postCode" value={postCode} type='text' />
+                    <InputFC name='postCode' nestName='senderAddress' />
                 </label>
             </div>
             <label>
                 <p>Country</p>
-                <input onChange={inputHandler} name="country" value={country} type="text" />
+                <InputFC name='country' nestName='senderAddress' />
             </label>
         </div>
     </Wrapper>

@@ -1,6 +1,9 @@
 import styled from 'styled-components'
 import RemoveIco from '../../../public/assets/icon-delete.svg'
-import React, { Dispatch, SetStateAction, ChangeEvent, useState, useEffect } from 'react'
+import React, { ChangeEvent } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { AppState } from '../../../redux/duck'
+import { updateItem, deleteItem } from '../../../redux/duck/invoiceForm'
 
 const StyledItem = styled.div`
     margin: 45px 0px;
@@ -60,35 +63,37 @@ const StyledItem = styled.div`
 `
 
 interface ItemInteface {
-    itemProps: any
-    setProps: any
-    deleteHandler: any
+    id: string
 }
 
-const Item:React.FC<ItemInteface> = ({setProps, itemProps, deleteHandler}) => {
-    const stateHandler = (e:ChangeEvent<HTMLInputElement>)=>{
-        setProps(itemProps.id, e)
+const Item:React.FC<ItemInteface> = ({id}) => {
+    const reduxItem = useSelector((state:AppState)=>state.invoiceForm.items.find(elem=>elem.id === id))
+    const dispatch = useDispatch()
+    const stateHandler = (e:ChangeEvent<HTMLInputElement>, change_sum?:boolean)=>{
+        dispatch(updateItem({id: id, name: e.target.name, value: e.target.value, change_sum}))
     }
+
+    const {name, quantity, price, total} = reduxItem
     return (
         <StyledItem>
             <label>
                 <p>Item Name</p>
-                <input name='name' type='text' onChange={stateHandler} value={itemProps.name} />
+                <input name='name' type='text' onChange={e=>stateHandler(e)} value={name} />
             </label>
             <div>
                 <label>
                     <p>Qty.</p>
-                    <input name='quantity' type='number' onChange={stateHandler} value={itemProps.quantity} />
+                    <input name='quantity' type='number' onChange={e=>stateHandler(e, true)} value={quantity} />
                 </label>
                 <label>
                     <p>Price</p>
-                    <input name='price' type='number' onChange={stateHandler} value={itemProps.price} />
+                    <input name='price' type='number' onChange={e=>stateHandler(e, true)} value={price} />
                 </label>
                 <label>
                     <p>Total</p>
                     <div>
-                        <span>{itemProps.total}</span>
-                        <RemoveIco onClick={()=>deleteHandler(itemProps.id)} />
+                        <span>{total}</span>
+                        <RemoveIco onClick={()=>dispatch(deleteItem(id))} />
                     </div>
                 </label>
             </div>

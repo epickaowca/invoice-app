@@ -66,5 +66,5 @@ export const defaultFormState = {
             name: "", quantity: 1, price: 0, total: "0.00", id: 'xdwafe'
         },
     ],
-    "total": 556.00
+    total: 0
 }

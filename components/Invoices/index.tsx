@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import InvoiceItem from './InvoiceItem'
-
-
+import { AppState } from '../../redux/duck'
+import { useSelector } from 'react-redux'
 
 const Wrapper = styled.section`
     display: flex;
@@ -16,10 +16,10 @@ const Wrapper = styled.section`
 
 
 const Invoices:React.FC = () => {
+  const invoiceList = useSelector((state:AppState)=>state.app.invoiceList);
     return (
         <Wrapper>
-            <InvoiceItem />
-            <InvoiceItem />
+            {invoiceList.length ? invoiceList.map(elem=><InvoiceItem props={elem} key={elem.id} />) : <h1>no Invoice found</h1>}
         </Wrapper>
     )
 }
