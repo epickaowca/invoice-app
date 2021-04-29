@@ -22,7 +22,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "components/invoice/InvoiceInfo"  ],
   "exclude": [
     "node_modules"
   ]

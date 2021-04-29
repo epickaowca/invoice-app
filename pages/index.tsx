@@ -1,28 +1,16 @@
-import { CSSProperties, useEffect } from 'react'
-import styled from 'styled-components'
-import Header from '../components/Header'
-import TopPanel from '../components/TopPanel.tsx'
-import Invoices from '../components/Invoices'
-import { useSelector, useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import Header from '../elements/Header'
+import TopPanel from '../components/home/TopPanel.tsx'
+import Invoices from '../components/home/Invoices'
+import { useDispatch } from 'react-redux'
 import { loadData } from '../redux/duck/app'
-import { AppState } from '../redux/duck/index'
 import InvoiceForm from '../elements/InvoiceForm'
 import axios from 'axios'
-
-interface CssVariables extends CSSProperties{
-  '--bg-color': string
-}
-
-const Wrapper = styled.div`
-  background: var(--bg-color);
-  min-height: 100vh;
-`
+import GlobalStyle from '../elements/GlobalStyle'
 
 let alreadyDone = false
 
 const Home:React.FC = ()=> {
-  const darkMode = useSelector((state:AppState)=>state.app.darkMode);
-  const bgColor = !darkMode ? '#F8F8FB' : '#141625'
   const dispatch = useDispatch()
   
   useEffect(()=>{
@@ -37,12 +25,12 @@ const Home:React.FC = ()=> {
     }
   },[])
   return (
-    <Wrapper style={{'--bg-color': bgColor} as CssVariables}>
+    <GlobalStyle>
       <Header />
       <TopPanel />
       <Invoices />
       <InvoiceForm />
-    </Wrapper>
+    </GlobalStyle>
   )
 }
 

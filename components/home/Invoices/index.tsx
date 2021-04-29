@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import InvoiceItem from './InvoiceItem'
-import { AppState } from '../../redux/duck'
+import { AppState } from '../../../redux/duck'
 import { useSelector } from 'react-redux'
 
 const Wrapper = styled.section`

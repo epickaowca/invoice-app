@@ -1,6 +1,6 @@
 import { useState, CSSProperties } from 'react'
 import styled from 'styled-components'
-import ArrowIco from '../../public/assets/icon-arrow-down.svg'
+import ArrowIco from '../../../public/assets/icon-arrow-down.svg'
 
 interface WrapperVariables extends CSSProperties{
     '--filter--visible': string

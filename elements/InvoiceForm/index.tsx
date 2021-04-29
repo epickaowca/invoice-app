@@ -11,6 +11,8 @@ import { useEffect } from 'react'
 import { defaultFormState } from './utility'
 import { changeState } from '../../redux/duck/invoiceForm'
 import ActionSection from './ActionSection'
+import GoBack from '../GoBack'
+
 
 const Wrapper = styled.section(({theme:{media:{ tablet, desktop },colors:{ cornflower_blue, lavender }}})=>`
     display: var(--display-case);
@@ -171,10 +173,7 @@ const InvoiceForm:React.FC = () => {
     return (
         <>
             <Wrapper style={wrapperStyles as WrapperInterface}>
-                <div onClick={()=>dispatch(setInvoiceFormVisible({visibleBoolean: false}))}>
-                    <ArrowLeft />
-                    <p>Go back</p>
-                </div>
+                <GoBack clickHandler={()=>dispatch(setInvoiceFormVisible({visibleBoolean: false}))} />
                 <h1>{editCase ? `Edit #${invoiceID}`: 'New Invoice'}</h1>
                 <section>
                     <BillFrom />

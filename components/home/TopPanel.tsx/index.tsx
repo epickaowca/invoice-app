@@ -1,11 +1,11 @@
 import { CSSProperties } from 'react'
-import { AppState } from '../../redux/duck'
+import { AppState } from '../../../redux/duck'
 import styled from 'styled-components'
 import Filter from './Filter'
 import Article from './Article'
-import PrimaryButton from '../../elements/PrimaryButton' 
+import PrimaryButton from '../../../elements/PrimaryButton' 
 import { useSelector, useDispatch } from 'react-redux'
-import { setInvoiceFormVisible } from '../../redux/duck/app'
+import { setInvoiceFormVisible } from '../../../redux/duck/app'
 
 interface StyledInterface extends CSSProperties{
     '--color-dark-mode': string

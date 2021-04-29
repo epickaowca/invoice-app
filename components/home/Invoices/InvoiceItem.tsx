@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux'
-import { AppState } from '../../redux/duck'
+import { AppState } from '../../../redux/duck'
 import { CSSProperties } from 'react'
 import styled from 'styled-components'
-import InvoiceStatus from '../../elements/InvoiceStatus'
+import InvoiceStatus from '../../../elements/InvoiceStatus'
 import Link from 'next/link'
-import IcoArrow from '../../public/assets/icon-arrow-right.svg'
-import { defaultFormState } from '../../elements/InvoiceForm/utility'
+import IcoArrow from '../../../public/assets/icon-arrow-right.svg'
+import { defaultFormState } from '../../../elements/InvoiceForm/utility'
 
 interface StyledInterface extends CSSProperties {
     '--color-darkmode': string
