@@ -3,7 +3,9 @@ import PrimaryButton from '../../elements/PrimaryButton'
 import SecondaryButton from '../../elements/SecondaryButton'
 import styled from 'styled-components'
 
-const Wrapper = styled.div`
+type WrapperType = {bottomCase: boolean} 
+
+const Wrapper = styled.div<WrapperType>`
     background: white;
     padding: 15px;
     & > div{
@@ -16,6 +18,7 @@ const Wrapper = styled.div`
         }
     }
     ${p=>p.theme.media.tablet}{
+        ${p=>p.bottomCase && 'display: none'};
         & > div{
             max-width: unset;
             margin: unset;
@@ -34,10 +37,14 @@ const Wrapper = styled.div`
     }
 `
 
+interface RFInterface {
+    bottomCase?: boolean
+    id: string
+}
 
-const Actions:React.FC = () => {
+const Actions:React.FC<RFInterface> = ({bottomCase, id}) => {
     return (
-        <Wrapper>
+        <Wrapper bottomCase={bottomCase}>
             <div>
                 <SecondaryButton>Edit</SecondaryButton>
                 <PrimaryButton color='tomato' content='Delete' />

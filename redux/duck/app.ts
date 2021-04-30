@@ -1,11 +1,12 @@
 export const DARK_MODE = 'app/dark_mode'
 export const SHOW_INVOICE_FORM = 'app/show_invoice_form'
-export const LOAD_DATA = 'app/load_data'
 export const ADD_INVOICE = 'app/add_item'
 export const UPDATE_INVOICE = 'app/update_invoice'
+export const LOAD_INITIAL_INVOICES = 'app/load_initial_invoices'
+export const LOAD_INITIAL_INVOICES_SUCCES = 'app/load_initial_invoices_succes'
+export const LOAD_INITIAL_INVOICES_FAIL = 'app/load_initial_invoices_fail'
 
 import { defaultFormState } from '../../elements/InvoiceForm/utility'
-import { UpdateItemType } from './invoiceForm'
 
 export interface appStateInterface{
     readonly darkMode: boolean
@@ -13,6 +14,8 @@ export interface appStateInterface{
     readonly InvoiceFormEditCase: boolean
     readonly editingInvoiceID: string
     readonly invoiceList: typeof defaultFormState[]
+    readonly invoiceListLoading: boolean,
+    readonly invoiceListError: string,
 }
 
 const initialState:appStateInterface={
@@ -21,6 +24,8 @@ const initialState:appStateInterface={
     InvoiceFormEditCase: false,
     editingInvoiceID: '',
     invoiceList: [],
+    invoiceListLoading: false,
+    invoiceListError: '',
 }
 
 const reducer = (state = initialState, action:ActionTypes)=>{
@@ -33,7 +38,7 @@ const reducer = (state = initialState, action:ActionTypes)=>{
         case ADD_INVOICE:
                 return{
                     ...state,
-                    invoiceList: [...state.invoiceList, action.payload]
+                    invoiceList: [action.payload, ...state.invoiceList]
                 }
         case UPDATE_INVOICE:{
             const { id, value } = action.payload
@@ -51,11 +56,27 @@ const reducer = (state = initialState, action:ActionTypes)=>{
                 editingInvoiceID: editId ? editId : state.editingInvoiceID
             }
         }
-        case LOAD_DATA:
+        case LOAD_INITIAL_INVOICES:
             return{
-                ...state,
-                invoiceList: action.payload
-            }
+            ...state,
+            invoiceListLoading: true
+        }
+
+        case LOAD_INITIAL_INVOICES_SUCCES:
+            return{
+            ...state,
+            invoiceList: action.payload,
+            invoiceListLoading: false,
+            invoiceListError: ''
+        }
+        
+        case LOAD_INITIAL_INVOICES_FAIL:
+            return{
+            ...state,
+            invoiceListLoading: false,
+            invoiceListError: action.payload
+        }
+
         default: return state
     }
 }
@@ -65,18 +86,20 @@ type InvoiceFormTypeHelper = {visibleBoolean: boolean, editCase?: boolean, editI
 
 export type DarkModeType = {type: typeof DARK_MODE}
 export type ShowInvoiceFormType = {type: typeof SHOW_INVOICE_FORM, payload: InvoiceFormTypeHelper}
-export type LoadDataType = {type: typeof LOAD_DATA, payload: typeof defaultFormState[][]}
 export type AddInvoiceType = {type: typeof ADD_INVOICE, payload: typeof defaultFormState}
 export type UpdateInvoiceType = {type: typeof UPDATE_INVOICE, payload: {id:string, value:typeof defaultFormState}}
+export type LoadInitInviocesType = {type: typeof LOAD_INITIAL_INVOICES}
+export type LoadInitInviocesSuccesType = {type: typeof LOAD_INITIAL_INVOICES_SUCCES, payload: []}
+export type LoadInitInviocesFailType = {type: typeof LOAD_INITIAL_INVOICES_FAIL, payload: string}
 
 
 export const setDarkMode = ():ActionTypes=>({type:DARK_MODE})
 export const setInvoiceFormVisible = (payload:InvoiceFormTypeHelper):ActionTypes=>({type:SHOW_INVOICE_FORM, payload})
-export const loadData = (payload:typeof defaultFormState[][]):ActionTypes=>({type:LOAD_DATA, payload})
 export const addInvoice = (payload:typeof defaultFormState):ActionTypes=>({type:ADD_INVOICE, payload})
 export const updateInvoice = (payload:{id:string, value:typeof defaultFormState}):ActionTypes=>({type:UPDATE_INVOICE, payload})
+export const loadInitInvoices = ():ActionTypes=>({type:LOAD_INITIAL_INVOICES})
 
 
-export type ActionTypes = DarkModeType | ShowInvoiceFormType | LoadDataType | AddInvoiceType | UpdateInvoiceType
+export type ActionTypes = DarkModeType | ShowInvoiceFormType | AddInvoiceType | UpdateInvoiceType | LoadInitInviocesType | LoadInitInviocesSuccesType | LoadInitInviocesFailType
 
 export default reducer

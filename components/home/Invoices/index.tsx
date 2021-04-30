@@ -17,9 +17,12 @@ const Wrapper = styled.section`
 
 const Invoices:React.FC = () => {
   const invoiceList = useSelector((state:AppState)=>state.app.invoiceList);
+  const loading = useSelector((state:AppState)=>state.app.invoiceListLoading);
+  const error = useSelector((state:AppState)=>state.app.invoiceListError);
+
     return (
         <Wrapper>
-            {invoiceList.length ? invoiceList.map(elem=><InvoiceItem props={elem} key={elem.id} />) : <h1>no Invoice found</h1>}
+            {error ? <h1>{error}</h1> : loading ? <h1>Loading</h1> : invoiceList.length ? invoiceList.map(elem=><InvoiceItem props={elem} key={elem.id} />) : <h1>no Invoice found</h1>}
         </Wrapper>
     )
 }

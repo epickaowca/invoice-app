@@ -127,7 +127,12 @@ const BottomSection = styled.section`
     }
 `
 
-const InvoiceInfo:React.FC = () => {
+interface RFInterface {
+    id: string
+}
+
+
+const InvoiceInfo:React.FC<RFInterface> = ({id}) => {
     
     return (
         <Wrapper>

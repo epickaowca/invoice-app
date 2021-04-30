@@ -2,6 +2,9 @@ import React from 'react'
 import Actions from './Actions'
 import InvoiceStatus from '../../elements/InvoiceStatus'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
+import { AppState } from '../../redux/duck'
+import app from 'next/app'
 
 const Wrapper = styled.div`
     width: 90%;
@@ -51,14 +54,18 @@ const Wrapper = styled.div`
     }
 `
 
-const TopBar:React.FC = () => {
+interface RFInterface {
+    id: string
+}
+
+const TopBar:React.FC<RFInterface> = ({id}) => {
     return (
         <Wrapper>
             <div>
                 <h2>Status</h2>
                 <InvoiceStatus status='pending' />
             </div>
-            <Actions />
+            <Actions id={id} />
         </Wrapper>
     )
 }

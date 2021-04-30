@@ -7,6 +7,10 @@ import Actions from '../../../components/invoice/Actions'
 import TopBar from '../../../components/invoice/TopBar'
 import InvoiceInfo from '../../../components/invoice/InvoiceInfo'
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
+import { useSelector, useDispatch } from 'react-redux'
+import { AppState } from '../../../redux/duck'
+import { loadInitInvoices } from '../../../redux/duck/app'
 
 const MainSection = styled.section`
     max-width: 450px;
@@ -35,17 +39,24 @@ const MainSection = styled.section`
 `
 
 
-const Invoice = () => {
+const Invoice:React.FC = () => {
+    const invoices = useSelector((state:AppState)=>state.app.invoiceList)
+    const dispatch = useDispatch()
+    if(!invoices.length){
+        dispatch(loadInitInvoices())    
+    }
+    const router = useRouter()
+    const {id} = router.query
     return (
         <GlobalStyle>
             <Header />
             <InvoiceForm />
             <MainSection>
                 <GoBack />
-                <TopBar />
-                <InvoiceInfo />
+                <TopBar id={id as string} />
+                <InvoiceInfo id={id as string} />
             </MainSection>
-            {/* <Actions /> */}
+            <Actions bottomCase id={id as string} />
         </GlobalStyle>
     )
 }
