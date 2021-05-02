@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { defaultFormState } from '../../../../elements/InvoiceForm/utility'
 
 const Wrapper = styled.div`
     margin: 25px 0px;
@@ -35,17 +36,23 @@ const Wrapper = styled.div`
         }
     }
 `
-const Item:React.FC = () => {
+
+interface RFInterface {
+    item: typeof defaultFormState.items[0]
+}
+
+const Item:React.FC<RFInterface> = ({item}) => {
+    const { name, quantity, price, total } = item
     return (
         <Wrapper>
             <div>
-                <strong>Banner Design</strong>
-                <p>2x £ 150.00</p>
+                <strong>{name}</strong>
+                <p>{quantity}x £ {price}</p>
             </div>
             <div>
-                <p>1</p>
-                <p>£ 150.00</p>
-                <strong>£ 300.00</strong>
+                <p>{quantity}</p>
+                <p>£ {price}</p>
+                <strong>£ {total}</strong>
             </div>
         </Wrapper>
     )

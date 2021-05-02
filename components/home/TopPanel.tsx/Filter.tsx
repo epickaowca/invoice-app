@@ -1,6 +1,10 @@
+import React from 'react'
 import { useState, CSSProperties } from 'react'
 import styled from 'styled-components'
 import ArrowIco from '../../../public/assets/icon-arrow-down.svg'
+import { updateFilters } from '../../../redux/duck/app'
+import { useSelector, useDispatch } from 'react-redux'
+import { AppState } from '../../../redux/duck'
 
 interface WrapperVariables extends CSSProperties{
     '--filter--visible': string
@@ -73,9 +77,18 @@ interface FilterInterface {
 }
 
 const Filter:React.FC<FilterInterface> = ({darkMode}) => {
+    const filters = useSelector((state:AppState)=>state.app.filters)
+    const dispatch = useDispatch()
     const [filterVisible, setFilterVisible] = useState(false)
     const filterStyle = filterVisible ? 'flex' : 'none'
     const bgColorStyle = darkMode ? '#1E2139' : 'white'
+
+    const { draft, pending, paid } = filters
+
+    const checkBoxHandler = (e:React.ChangeEvent<HTMLInputElement>)=>{
+        const { name, checked } = e.target
+        dispatch(updateFilters({name: name, value:checked}))
+    }
 
     return (
         <Wrapper>
@@ -88,15 +101,15 @@ const Filter:React.FC<FilterInterface> = ({darkMode}) => {
             </div>
             <FiltersWrapper style={{'--filter--visible': filterStyle, '--bg-color': bgColorStyle} as WrapperVariables}>
                 <label>
-                    <input type='checkbox' />
+                    <input onChange={checkBoxHandler} checked={draft} name='draft' type='checkbox' />
                     Draft
                 </label>
                 <label>
-                    <input type='checkbox' />
+                    <input onChange={checkBoxHandler} checked={pending} name='pending' type='checkbox' />
                     Pending
                 </label>
                 <label>
-                    <input type='checkbox' />
+                    <input onChange={checkBoxHandler} checked={paid} name='paid' type='checkbox' />
                     Paid
                 </label>
             </FiltersWrapper>
@@ -104,4 +117,4 @@ const Filter:React.FC<FilterInterface> = ({darkMode}) => {
     )
 }
 
-export default Filter
+export default React.memo(Filter)

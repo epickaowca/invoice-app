@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import PlusIco from '../public/assets/icon-plus.svg'
 import { useSelector } from 'react-redux'
 import { AppState } from '../redux/duck'
+import Link from 'next/link'
 
 type StyledBtnType = { content: string, case2: boolean}
 

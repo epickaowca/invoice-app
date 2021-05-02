@@ -13,7 +13,6 @@ const Home:React.FC = ()=> {
   if(!invoiceList.length){
     dispatch(loadInitInvoices())
   }
-  console.log(invoiceList)
   return (
     <GlobalStyle>
       <Header />

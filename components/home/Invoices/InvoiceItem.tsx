@@ -142,7 +142,7 @@ const InvoiceItem:React.FC<FCInterface> = ({props}) => {
     const colorStyle = darkMode ? 'white' : 'black'
     const bgColorStyle = darkMode ? '#1E2139' : 'white'
     return (
-        <Link href="#">
+        <Link href={`invoice/${props.id}`}>
             <Wrapper style={{ '--color-darkmode': colorStyle, '--bg-color-darkmode': bgColorStyle } as StyledInterface}>
                 <div>
                     <p>#{props.id}</p>

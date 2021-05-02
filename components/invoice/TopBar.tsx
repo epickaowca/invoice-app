@@ -4,11 +4,10 @@ import InvoiceStatus from '../../elements/InvoiceStatus'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { AppState } from '../../redux/duck'
-import app from 'next/app'
 
 const Wrapper = styled.div`
     width: 90%;
-    background: white;
+    background: var(--bg-color);
     padding: 25px;
     margin: auto;
     margin-top: 15px;
@@ -59,11 +58,12 @@ interface RFInterface {
 }
 
 const TopBar:React.FC<RFInterface> = ({id}) => {
+    const stateInvoice = useSelector((state:AppState) => state.app.invoiceList.find(elem=>elem.id === id))
     return (
         <Wrapper>
             <div>
                 <h2>Status</h2>
-                <InvoiceStatus status='pending' />
+                <InvoiceStatus status={stateInvoice && stateInvoice.status} />
             </div>
             <Actions id={id} />
         </Wrapper>

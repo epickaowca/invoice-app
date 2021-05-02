@@ -173,7 +173,7 @@ const InvoiceForm:React.FC = () => {
     return (
         <>
             <Wrapper style={wrapperStyles as WrapperInterface}>
-                <GoBack clickHandler={()=>dispatch(setInvoiceFormVisible({visibleBoolean: false}))} />
+                <GoBack clickHandler={closeForm} />
                 <h1>{editCase ? `Edit #${invoiceID}`: 'New Invoice'}</h1>
                 <section>
                     <BillFrom />

@@ -66,6 +66,7 @@ const ActionSection:React.FC = () => {
         invoiceHelper.status = status
         invoiceHelper.total = total
         dispatch(addInvoice(invoiceHelper))
+        closeForm()
     }
 
     const updateInvoiceToRedux = ()=>{
@@ -77,6 +78,7 @@ const ActionSection:React.FC = () => {
         console.log(total)
         invoiceHelper.total = total 
         dispatch(updateInvoice({id: invoiceHelper.id, value: invoiceHelper}))
+        closeForm()
     }
 
     return (

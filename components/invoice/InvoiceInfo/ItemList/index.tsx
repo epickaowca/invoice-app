@@ -1,5 +1,7 @@
 import Item from './Item'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
+import { AppState } from '../../../../redux/duck'
 
 const Wrapper = styled.section`
     padding: 15px;
@@ -8,11 +10,16 @@ const Wrapper = styled.section`
     }
 `
 
-const ItemList:React.FC = () => {
+interface RFInterface{
+    id: string
+}
+
+const ItemList:React.FC<RFInterface> = ({id}) => {
+    const stateInvoice = useSelector((state:AppState) => state.app.invoiceList.find(elem=>elem.id === id))
+    console.log()
     return (
         <Wrapper>
-            <Item />
-            <Item />
+            {stateInvoice && stateInvoice.items.map(elem=><Item key={elem.id} item={elem} />)}
         </Wrapper>
     )
 }
