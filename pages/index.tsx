@@ -9,8 +9,8 @@ import { AppState } from '../redux/duck'
 
 const Home:React.FC = ()=> {
   const dispatch = useDispatch()
-  const invoiceList = useSelector((state:AppState)=>state.app.invoiceList)
-  if(!invoiceList.length){
+  const firstLoad = useSelector((state:AppState)=>state.app.firstLoad)
+  if(firstLoad){
     dispatch(loadInitInvoices())
   }
   return (

@@ -18,9 +18,11 @@ export interface appStateInterface{
     readonly invoiceListLoading: boolean,
     readonly invoiceListError: string,
     readonly filters: {draft: boolean, pending: boolean, paid: boolean },
+    readonly firstLoad: boolean
 }
 
 const initialState:appStateInterface={
+    firstLoad: true,
     darkMode: false,
     showInvoiceForm: false,
     InvoiceFormEditCase: false,
@@ -65,7 +67,8 @@ const reducer = (state = initialState, action:ActionTypes)=>{
         case LOAD_INITIAL_INVOICES:
             return{
             ...state,
-            invoiceListLoading: true
+            invoiceListLoading: true,
+            firstLoad: false
         }
 
         case LOAD_INITIAL_INVOICES_SUCCES:

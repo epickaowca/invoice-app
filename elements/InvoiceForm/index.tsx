@@ -159,7 +159,6 @@ const InvoiceForm:React.FC = () => {
     useEffect(() => {
         if(editCase){
             const invoice = (allInvoices as any).find(elem=>elem.id === editing_invoice_ID)
-            console.log(invoice)
             dispatch(changeState({fullState: invoice}))
         }else{
             dispatch(changeState({fullState: defaultFormState}))

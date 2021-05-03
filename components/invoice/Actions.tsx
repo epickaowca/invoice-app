@@ -74,4 +74,4 @@ const Actions:React.FC<RFInterface> = ({bottomCase, id}) => {
     )
 }
 
-export default Actions
+export default React.memo(Actions)

@@ -1,3 +1,4 @@
+import React from 'react'
 import Item from './Item'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
@@ -16,7 +17,6 @@ interface RFInterface{
 
 const ItemList:React.FC<RFInterface> = ({id}) => {
     const stateInvoice = useSelector((state:AppState) => state.app.invoiceList.find(elem=>elem.id === id))
-    console.log()
     return (
         <Wrapper>
             {stateInvoice && stateInvoice.items.map(elem=><Item key={elem.id} item={elem} />)}
@@ -24,4 +24,4 @@ const ItemList:React.FC<RFInterface> = ({id}) => {
     )
 }
 
-export default ItemList
+export default React.memo(ItemList)

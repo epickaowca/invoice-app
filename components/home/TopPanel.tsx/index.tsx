@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react'
+import React, { CSSProperties } from 'react'
 import { AppState } from '../../../redux/duck'
 import styled from 'styled-components'
 import Filter from './Filter'
@@ -51,4 +51,4 @@ const TopPanel:React.FC = () => {
     )
 }
 
-export default TopPanel
+export default React.memo(TopPanel)

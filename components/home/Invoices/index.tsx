@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import InvoiceItem from './InvoiceItem'
 import { AppState } from '../../../redux/duck'
 import { useSelector } from 'react-redux'
+import EmptySvg from '../../../public/assets/illustration-empty.svg'
 
 const Wrapper = styled.section`
     display: flex;
@@ -12,6 +13,33 @@ const Wrapper = styled.section`
         padding: 0 45px;
         max-width: 1100px;
         margin: auto;
+    }
+`
+
+const EmptyWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    & > p{
+        color: #7C5DFA;
+        margin-top: 25px;
+    }
+    ${p=>p.theme.media.tablet}{
+        margin-top: 100px;
+        & > p{
+            margin-top: 100px;
+        }
+        & > svg{
+            transform: scale(1.7);
+        }
+    }
+    ${p=>p.theme.media.desktop}{
+        & > p{
+            margin-top: 150px;
+        }
+        & > svg{
+            transform: scale(2);
+        }
     }
 `
 
@@ -31,13 +59,10 @@ const Invoices:React.FC = () => {
         const keyFHelper = keysH.filter((elem, index)=>valH[index] ? elem : null)
         invoiceListFiltered = invoiceList.filter(elem=>keyFHelper.includes(elem.status) ? elem : null)
     }
-
-    
-    
     
     return (
         <Wrapper>
-            {error ? <h1>{error}</h1> : loading ? <h1>Loading</h1> : invoiceListFiltered.length ? invoiceListFiltered.map(elem=><InvoiceItem props={elem} key={elem.id} />) : <h1>no Invoice found</h1>}
+            {error ? <h1>{error}</h1> : loading ? <h1>Loading</h1> : invoiceListFiltered.length ? invoiceListFiltered.map(elem=><InvoiceItem props={elem} key={elem.id} />) : <EmptyWrapper><EmptySvg /><p>you can add an invoice using the blue button</p></EmptyWrapper>}
         </Wrapper>
     )
 }

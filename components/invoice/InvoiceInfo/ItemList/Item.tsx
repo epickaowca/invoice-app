@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { defaultFormState } from '../../../../elements/InvoiceForm/utility'
+import React from 'react'
 
 const Wrapper = styled.div`
     margin: 25px 0px;
@@ -58,4 +59,4 @@ const Item:React.FC<RFInterface> = ({item}) => {
     )
 }
 
-export default Item
+export default React.memo(Item)

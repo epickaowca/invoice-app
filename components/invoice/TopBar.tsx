@@ -70,4 +70,4 @@ const TopBar:React.FC<RFInterface> = ({id}) => {
     )
 }
 
-export default TopBar
+export default React.memo(TopBar)

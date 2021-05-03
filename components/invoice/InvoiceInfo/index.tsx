@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from 'styled-components'
 import ItemList from './ItemList'
 import { useSelector } from 'react-redux'
@@ -207,4 +208,4 @@ const InvoiceInfo:React.FC<RFInterface> = ({id}) => {
     )
 }
 
-export default InvoiceInfo
+export default React.memo(InvoiceInfo)

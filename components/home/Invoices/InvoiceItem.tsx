@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { AppState } from '../../../redux/duck'
-import { CSSProperties } from 'react'
+import React, { CSSProperties } from 'react'
 import styled from 'styled-components'
 import InvoiceStatus from '../../../elements/InvoiceStatus'
 import Link from 'next/link'
@@ -141,6 +141,7 @@ const InvoiceItem:React.FC<FCInterface> = ({props}) => {
     const darkMode = useSelector((state: AppState)=> state.app.darkMode)
     const colorStyle = darkMode ? 'white' : 'black'
     const bgColorStyle = darkMode ? '#1E2139' : 'white'
+    console.log(props)
     return (
         <Link href={`invoice/${props.id}`}>
             <Wrapper style={{ '--color-darkmode': colorStyle, '--bg-color-darkmode': bgColorStyle } as StyledInterface}>
@@ -163,4 +164,4 @@ const InvoiceItem:React.FC<FCInterface> = ({props}) => {
     )
 }
 
-export default InvoiceItem
+export default React.memo(InvoiceItem)

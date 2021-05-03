@@ -49,10 +49,10 @@ interface WrapperInterface extends CSSProperties {
 }
 
 const Invoice:React.FC = () => {
-    const invoices = useSelector((state:AppState)=>state.app.invoiceList)
     const darkMode = useSelector((state:AppState)=>state.app.darkMode)
+    const firstLoad = useSelector((state:AppState)=>state.app.firstLoad)
     const dispatch = useDispatch()
-    if(!invoices.length){
+    if(firstLoad){
         dispatch(loadInitInvoices())    
     }
     const router = useRouter()
