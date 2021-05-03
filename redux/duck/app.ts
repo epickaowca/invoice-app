@@ -48,7 +48,8 @@ const reducer = (state = initialState, action:ActionTypes)=>{
             const { id, value, removeCase } = action.payload
             return{
                 ...state,
-                invoiceList: state.invoiceList.map(elem=>elem.id === id ? removeCase ? null : value : elem).filter(elem=>elem)
+                invoiceList: state.invoiceList.map(elem=>elem.id === id ? removeCase ? null : value : elem).filter(elem=>elem),
+                InvoiceFormEditCase: removeCase ? false : state.InvoiceFormEditCase
             }
         }
 

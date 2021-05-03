@@ -13,7 +13,6 @@ const reducer = (state = initialState, action:ActionTypes)=>{
     switch(action.type){
         case CHANGE_STATE:{
             const { name, value, fullState } = action.payload
-    
             if(name && (name[0] === 'createdAt' || name[0] === 'paymentTerms')){
                 const inputDate = name[0] === 'createdAt' ? value : state.createdAt
                 const terms = name[0] === 'paymentTerms' ? value : state.paymentTerms 

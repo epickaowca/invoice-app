@@ -1,14 +1,24 @@
 import * as types from '../duck/app'
-import { call, put, takeEvery, takeLatest, StrictEffect} from 'redux-saga/effects'
+import { call, put, takeEvery, takeLatest, StrictEffect, select} from 'redux-saga/effects'
 import axios from 'axios'
+import { AppState } from '../duck'
 
 
-//watcher
 function* rootSaga(): Generator<StrictEffect>{
+    yield takeEvery(types.ADD_INVOICE, saveToLocalStorage)
+    yield takeEvery(types.UPDATE_INVOICE, saveToLocalStorage)
     yield takeEvery(types.LOAD_INITIAL_INVOICES, getInvoices)
 }
 
-//worker
+function* saveToLocalStorage(){
+    const invoices =  yield select((state:AppState)=>state.app.invoiceList)
+    try{
+        localStorage.setItem('invoiceList', JSON.stringify(invoices));
+    }catch(e){
+        throw e
+    }
+}
+
 function* getInvoices(){
     try{
         const invoices = yield call(fetchInvoices)
@@ -18,7 +28,7 @@ function* getInvoices(){
     }
 }
 
-//function helper
+
 const fetchInvoices =  async()=>{
     let invoicesFromStorage
     try {
@@ -27,7 +37,7 @@ const fetchInvoices =  async()=>{
         invoicesFromStorage = null
     }
     if(invoicesFromStorage  ){
-        return invoicesFromStorage
+        return JSON.parse(invoicesFromStorage)
     }else{
         return axios.get('/data.json')
         .then(res=>res.data)
